@@ -4,15 +4,15 @@ For more information check documentation
 """
 
 import matplotlib.pyplot as plt
+import Complex_Numbers as cmp
 import math
 
 class Julia_Set:
-    def __init__(self , constant_real = 0 , constant_imaginary = 0 , max_iter = 100 , x_lower = -1.5 , x_upper = 1.5 , y_lower = -1.5 , y_upper  =  1.5 , interval = 0.05):
+    def __init__(self , complex_constant = cmp.Complex_Number(0 , 0) , max_iter = 100 , x_lower = -1.5 , x_upper = 1.5 , y_lower = -1.5 , y_upper  =  1.5 , interval = 0.05):
         """
         This function initializes Julia_Set object
         """
-        self.constant_real = constant_real
-        self.constant_imaginary = constant_imaginary
+        self.complex_constant = complex_constant
         self.max_iter = max_iter
         self.x_lower = x_lower
         self.x_upper = x_upper
@@ -25,10 +25,7 @@ class Julia_Set:
         This function prints Julia_Set object
         """
         s = "The function is : z^2 + ("
-        s += str(self.constant_real)
-        s += str(" + ")
-        s += str(self.constant_imaginary)
-        s += "i)"
+        s += str(self.complex_constant)
         s += '\n'
         s += "Max iteration is : "
         s += str(self.max_iter)
@@ -43,6 +40,20 @@ class Julia_Set:
         s += '\n'
 
         return s
+
+    def find_Julia_Set(self):
+        """
+        This function finds Julia Set of given function and returns x_coordinates and y_coordinates
+        """
+        r = self.compute_R()
+        x_axis = []
+        y_axis = []
+        x_temp = self.x_lower
+
+        while x_temp < self.x_upper :
+            y_temp = self.y_lower
+            while y_temp < self.y_upper :
+
 
 
     def plot_Julia_Set(self):
@@ -81,12 +92,12 @@ class Julia_Set:
         """
         This function determines the c in the formula f(z) = z^2 + c
         """
-        self.constant = constant
+        self.complex_constant = constant
     def get_constant(self):
         """
         This function returns the value of constant
         """
-        return self.constant
+        return self.complex_constant
     def set_maxiter(self , max_iter):
         """
         This function sets max iteration
@@ -112,28 +123,20 @@ class Julia_Set:
         This function get the coordinates of the window as a list
         """
         return [self.x_lower , self.x_upper , self.y_lower , self.y_upper]
-    def compute_one_more_iter(self , real_part , imaginary_part ):
+    def compute_one_more_iter(self , complex_num ):
         """
         This function computes f(real_part + i * imaginary_part)
         """
-        real = real_part * real_part - imaginary_part * imaginary_part + self.constant_real
-        imaginary = 2 * real_part * imaginary_part + self.constant_imaginary
-        return [real , imaginary]
+        square_complex_num = complex_num.multiply_complex_numbers(complex_num)
+        return square_complex_num.sum_complex_numbers(self.complex_constant)
 
     def compute_R(self):
         """
         This function computes R using theorem in the documentation
         """
-        r = 1 + math.sqrt(1 + 4 * compute_modulus(self.constant_real , self.constant_imaginary))
+        r = 1 + math.sqrt(1 + 4 * self.complex_constant.compute_modulus())
         r = r / 2
         return r
-
-def compute_modulus(real_part , imaginary_part):
-    """
-    This function computes the modulus of the a complex number
-    """
-    result = real_part * real_part + imaginary_part * imaginary_part
-    return result
 
 def run():
     julia_set = Julia_Set(constant_real = 1 , constant_imaginary = 0 , max_iter = 100 , interval = 0.05 )

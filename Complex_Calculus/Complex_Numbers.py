@@ -28,11 +28,31 @@ class Complex_Number():
         s += "i"
         return s
 
+    def get_clone(self):
+        """
+        Returns the copy of the complex number
+        """
+        new_complex = Complex_Number(self.real_part , self.imaginary_part)
+
+        return new_complex
+
+    def get_real(self):
+        """
+        This function returns the real part of a complex number
+        """
+        return self.real_part
+
+    def get_imaginary(self):
+        """
+        This function returns the imaginary part of a complex number
+        """
+        return self.imaginary_part
+
     def compute_modulus(self):
         """
         This function computes modulus of a complex number
         """
-        return math.sqrt(self.real_part * self.real_part + self.imaginary_part * self.imaginary_part)
+        return self.real_part * self.real_part + self.imaginary_part * self.imaginary_part
 
     def sum_complex_numbers(self , other_complex_number):
         """

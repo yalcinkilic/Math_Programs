@@ -6,6 +6,7 @@ For more information check documentation
 import matplotlib.pyplot as plt
 import Complex_Numbers as cmp
 import math
+import time
 
 class Julia_Set:
     def __init__(self , complex_constant = cmp.Complex_Number(0 , 0) , max_iter = 100 , x_lower = -1.5 , x_upper = 1.5 , y_lower = -1.5 , y_upper  =  1.5 , interval = 0.05):
@@ -53,37 +54,28 @@ class Julia_Set:
         while x_temp < self.x_upper :
             y_temp = self.y_lower
             while y_temp < self.y_upper :
+                prev_complex = cmp.Complex_Number(x_temp , y_temp)
+                for dummy_i in range(self.max_iter):
+                    now_complex = self.compute_one_more_iter(prev_complex)
+                    modulus = now_complex.compute_modulus()
+                    if modulus * modulus > r * r  :
+                        break
+
+                    if dummy_i == self.max_iter - 1 :
+                        x_axis.append(x_temp)
+                        y_axis.append(y_temp)
+
+                    prev_complex = now_complex.get_clone()
+                y_temp += self.interval
+            x_temp += self.interval
+
+        return x_axis , y_axis
 
 
-
-    def plot_Julia_Set(self):
+    def plot_Julia_Set(self , x_axis , y_axis):
         """
         This function plots the Julia set a particular class instance,self
         """
-        r = self.compute_R()
-        x_axis = []
-        y_axis = []
-        x_initial = self.x_lower
-
-        while x_initial < self.x_upper :
-            y_initial = self.y_lower
-            while y_initial < self.y_upper :
-                pre_result_real = x_initial
-                pre_result_imaginary = y_initial
-                for dummy_i in range(self.max_iter) :
-                    result = self.compute_one_more_iter(pre_result_real , pre_result_imaginary)
-                    x_result = result[0]
-                    y_result = result[1]
-                    modulus = compute_modulus(x_result , y_result)
-                    if modulus > (r * r) :
-                        break
-                    if dummy_i == self.max_iter - 1:
-                        x_axis.append(x_initial)
-                        y_axis.append(y_initial)
-                    pre_result_real = result[0]
-                    pre_result_imaginary = result[1]
-                y_initial += self.interval
-            x_initial += self.interval
         plt.plot(x_axis , y_axis , 'ko')
         plt.axis([self.x_lower , self.x_upper , self.y_lower , self.y_upper])
         plt.show()
@@ -139,8 +131,13 @@ class Julia_Set:
         return r
 
 def run():
-    julia_set = Julia_Set(constant_real = 1 , constant_imaginary = 0 , max_iter = 100 , interval = 0.05 )
+    start = time.clock()
+    c = cmp.Complex_Number(1/7 , 1/3)
+    julia_set = Julia_Set(c, max_iter = 1000 , interval = 0.01 )
     print (str(julia_set))
-    julia_set.plot_Julia_Set()
+    x_axis , y_axis = julia_set.find_Julia_Set()
+    julia_set.plot_Julia_Set(x_axis , y_axis )
+    end = time.clock()
+    print("The execution time is:" , end - start , "seconds.")
 
 run()
